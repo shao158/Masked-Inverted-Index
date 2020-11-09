@@ -6,7 +6,6 @@
 #include <vector>
 
 #include "App.h"
-#include "Simple9.h"
 #include "Enclave_u.h"
 
 void generate_basic_encrypted_index(const char* plain_posting_file,

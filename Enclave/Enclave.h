@@ -35,6 +35,8 @@
 #include <assert.h>
 #include <stdlib.h>
 
+#include "Simple9.h"
+
 #if defined(__cplusplus)
 extern "C" {
 #endif

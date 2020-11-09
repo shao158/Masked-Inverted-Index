@@ -16,13 +16,13 @@
 #include <vector>
 
 #include "App.h"
-#include "Simple9.h"
 #include "Enclave_u.h"
 
 void query_basic_encrypted_index(const char* encrypted_index_file_name,
                                  const char* posting_info_file_name,
                                  const char* query_file_name,
-                                 const char* dataset_name) {
+                                 const char* dataset_name,
+                                 const char* merge_method) {
   std::string drop_cache_data = "1";
   std::map<std::string, std::pair<int64_t, int64_t>> postings_info;
   std::map<std::string, int64_t> term_df_info;
@@ -90,7 +90,7 @@ void query_basic_encrypted_index(const char* encrypted_index_file_name,
             query_keywords.size() * 3 * sizeof(int64_t) / sizeof(uint8_t),
             encrypted_index_file_name,
             dataset_name,
-            "wave");
+            merge_method);
         if (ret != SGX_SUCCESS) {
           std::cout << "Error: ecall_query_basic_encrypted_index." << std::endl;
           break;

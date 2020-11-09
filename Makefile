@@ -83,7 +83,7 @@ else
 	Urts_Library_Name := sgx_urts
 endif
 
-App_Cpp_Files := App/App.cpp App/GenerateBasicEncryptedIndex.cpp App/QueryBasicEncryptedIndex.cpp App/Simple9.cpp
+App_Cpp_Files := $(wildcard App/*.cpp) util/Simple9.cpp
 App_Include_Paths := -IInclude -IApp -I$(SGX_SDK)/include
 
 App_C_Flags := -fPIC -Wno-attributes $(App_Include_Paths)
@@ -118,7 +118,7 @@ else
 endif
 Crypto_Library_Name := sgx_tcrypto
 
-Enclave_Cpp_Files := Enclave/Enclave.cpp Enclave/Enclave_QueryBasicEncryptedIndex.cpp Enclave/Simple9.cpp
+Enclave_Cpp_Files := $(wildcard Enclave/*.cpp) util/Simple9.cpp
 Enclave_Include_Paths := -IInclude -IEnclave -I$(SGX_SDK)/include -I$(SGX_SDK)/include/tlibc -I$(SGX_SDK)/include/libcxx
 
 Enclave_C_Flags := $(Enclave_Include_Paths) -nostdinc -fvisibility=hidden -fpie -ffunction-sections -fdata-sections $(MITIGATION_CFLAGS)
@@ -231,6 +231,10 @@ App/%.o: App/%.cpp  App/Enclave_u.h
 	@$(CXX) $(SGX_COMMON_CXXFLAGS) $(App_Cpp_Flags) -c $< -o $@
 	@echo "CXX  <=  $<"
 
+util/%.o: util/%.cpp
+	@$(CXX) $(SGX_COMMON_CXXFLAGS) $(App_Cpp_Flags) -c $< -o $@
+	@echo "CXX  <=  $<"
+
 $(App_Name): App/Enclave_u.o $(App_Cpp_Objects)
 	@$(CXX) $^ -o $@ $(App_Link_Flags)
 	@echo "LINK =>  $@"
@@ -248,6 +252,10 @@ Enclave/Enclave_t.o: Enclave/Enclave_t.c
 	@echo "CC   <=  $<"
 
 Enclave/%.o: Enclave/%.cpp Enclave/Enclave_t.h
+	@$(CXX) $(SGX_COMMON_CXXFLAGS) $(Enclave_Cpp_Flags) -c $< -o $@
+	@echo "CXX  <=  $<"
+
+util/%.o: util/%.cpp
 	@$(CXX) $(SGX_COMMON_CXXFLAGS) $(Enclave_Cpp_Flags) -c $< -o $@
 	@echo "CXX  <=  $<"
 

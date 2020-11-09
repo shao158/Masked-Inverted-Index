@@ -189,14 +189,21 @@ int SGX_CDECL main(int argc, char *argv[]) {
   }
   else if (!strcmp(argv[1], "query_basic_index"))
   {
-    if (argc == 6
-        && (!strcmp(argv[5], "clueweb")
-            || !strcmp(argv[5], "trec45"))) {
-      query_basic_encrypted_index(argv[2], argv[3], argv[4], argv[5]);
+    if (argc == 7) {
+      if (strcmp(argv[5], "clueweb") * strcmp(argv[5], "trec45") != 0) {
+        fprintf(stderr, "Invalid dataset name.\n\n");
+        return 0;
+      } else if (strcmp(argv[6], "wave") * strcmp(argv[6], "wand") * strcmp(argv[6], "bmw") != 0) {
+        fprintf(stderr, "Invalid merge metghod.\n\n");
+        return 0;
+      }
+
+      query_basic_encrypted_index(argv[2], argv[3], argv[4], argv[5], argv[6]);
       /* Destroy the enclave */
       sgx_destroy_enclave(global_eid);
     } else {
-      fprintf(stderr, "./app query_basic_index [encrypted_index] [posting_info_file] [query_file] [dataset] \n\n");
+      fprintf(stderr,
+          "./app query_basic_index [encrypted_index] [posting_info_file] [query_file] [dataset] [merge_method] \n\n");
     }
   }
   else
